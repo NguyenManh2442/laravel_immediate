@@ -32,11 +32,11 @@
         </tr>
         @foreach($user as $key => $value)
             <tr>
-                <td>{{($user->perPage() * $user->currentPage()) - $user->perPage() + ($key + 1)}}</td>
-                <td>{{$value -> name}}</td>
-                <td>{{$value -> mail_address}}</td>
-                <td>{{$value -> address}}</td>
-                <td>{{$value -> phone}}</td>
+                <td>{{ $user->perPage() * ($user->currentPage() - 1) + (++$key) }}</td>
+                <td>{{ $value->name }}</td>
+                <td>{{ $value->mail_address }}</td>
+                <td>{{ $value->address }}</td>
+                <td>{{ $value->phone }}</td>
             </tr>
         @endforeach
     </table>

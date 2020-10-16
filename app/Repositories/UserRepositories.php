@@ -33,8 +33,29 @@ class UserRepositories extends EloquentRepository implements UserRepositoryInter
         $user->save();
         return true;
     }
+    public function getOnlyUser($id){
+        return $this->_model->newQuery()
+            ->where('id', $id)
+            ->get();
+    }
     public function updateUser($id, array $request){
-
+        $user = User::find($id);
+        $user->name = $request['name'];
+        $user->mail_address = $request['mail_address'];
+        $user->address = $request['address'];
+        $user->phone = $request['phone'];
+        if(empty($request['password'])){
+            $user->password = bcrypt($request['password']);
+        }
+        $user->save();
+        return true;
+    }
+    public function searchUser(array $request){
+        $query = $this->_model->newQuery();
+            foreach($request as $key => $value){
+                $query->where($key,'like','%'.$value.'%');
+            }
+        return $query->paginate(20);
     }
     public function deleteUser($id){
 

@@ -1,14 +1,13 @@
 <?php
 
-
 namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class HelperFacades extends Facade
+class HelperFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'Helper';
+        return 'helper';
     }
 }

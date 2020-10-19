@@ -58,7 +58,7 @@
         @foreach($user as $key => $value)
             <tr>
                 <td>{{ $user->perPage() * ($user->currentPage() - 1) + (++$key) }}</td>
-                <td>{{ \App\Http\Helpers\Helper::toUpperCase($value->name) }}</td>
+                <td>{{ \HelperFacade::toUpperCase($value->name) }}</td>
                 <td>{{ $value->mail_address }}</td>
                 <td>{{ $value->address }}</td>
                 <td>{{ $value->phone }}</td>

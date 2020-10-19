@@ -18,3 +18,5 @@ Route::get('/', function () {
 });
 Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store','edit', 'update']])->name('*','user');
 
+Route::get('/login','UserController@formLogin')->name('formLogin');
+Route::post('/login', 'UserController@login')->name('login');

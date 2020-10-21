@@ -4,9 +4,9 @@
 @endsection
 @section('main')
 <div>
-    @if(isset($data))
+    @if (isset($data))
         <h1 style="text-align: center">Update user</h1>
-        @foreach($data as $value)
+        @foreach ($data as $value)
         @endforeach
         <form action="{{ route('user.update', $value->id) }}" method="post">
             @method('PUT')
@@ -15,22 +15,22 @@
         <form action="{{ route('user.store') }}" method="post">
     @endif
         <lable style="color: {{ $errors->has('name') ? "red" : "black" }}">Ho ten user</lable>
-        <input type="text" name="name" style="border-color: {{ $errors->has('name') ? "red" : "black" }}" value="{{ !isset($data) ? "" : $value->name }}" /><br><br>
+        <input type="text" name="name" style="border-color: {{ $errors->has('name') ? "red" : "black" }}" value="{{ !isset($data) ? old('name') : $value->name }}" /><br><br>
         @error('name')
             <lable style="color: red">{{ $errors->first('name') }}</lable><br><br>
         @enderror
         <lable style="color: {{ $errors->has('mail_address') ? "red" : "black" }}">Email</lable>
-        <input type="text" name="mail_address" style="border-color: {{ $errors->has('mail_address') ? "red" : "black" }}" value="{{ !isset($data) ? "" : $value->mail_address }}" /><br><br>
+        <input type="text" name="mail_address" style="border-color: {{ $errors->has('mail_address') ? "red" : "black" }}" value="{{ !isset($data) ? old('mail_address') : $value->mail_address }}" /><br><br>
         @error('mail_address')
             <lable style="color: red">{{ $errors->first('mail_address') }}</lable><br><br>
         @enderror
         <lable style="color: {{ $errors->has('address') ? "red" : "black" }}">Address</lable>
-        <input type="text" name="address" style="border-color: {{ $errors->has('address') ? "red" : "black" }}" value="{{ !isset($data) ? "" : $value->address }}" /><br><br>
+        <input type="text" name="address" style="border-color: {{ $errors->has('address') ? "red" : "black" }}" value="{{ !isset($data) ? old('address') : $value->address }}" /><br><br>
         @error('address')
             <lable style="color: red">{{ $errors->first('address') }}</lable><br><br>
         @enderror
         <lable style="color: {{ $errors->has('phone') ? "red" : "black" }}">Phone</lable>
-        <input type="text" name="phone" style="border-color: {{ $errors->has('phone') ? "red" : "black" }}" value="{{ !isset($data) ? "" : $value->phone }}" /><br><br>
+        <input type="text" name="phone" style="border-color: {{ $errors->has('phone') ? "red" : "black" }}" value="{{ !isset($data) ? old('phone') : $value->phone }}" /><br><br>
         @error('phone')
             <lable style="color: red">{{ $errors->first('phone') }}</lable><br><br>
         @enderror

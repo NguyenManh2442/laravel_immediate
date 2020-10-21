@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
-use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +10,11 @@ use Throwable;
 
 class UserController extends Controller
 {
-    protected $userRepositories;
+    protected $user;
 
-    public function __construct(UserRepositoryInterface $userRepositories)
+    public function __construct(User $user)
     {
-        $this->userRepositories = $userRepositories;
+        $this->user = $user;
     }
 
     /**
@@ -25,30 +24,27 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->input('btn-search')){
+        if ($request->input('btn-search')) {
             $sName = $request->input('s-name');
             $sEmail = $request->input('s-email');
             $sPhone = $request->input('s-phone');
             $sAddress = $request->input('s-address');
             $keySearch = [];
-            if(isset($sName)){
+            if (isset($sName)) {
                 $keySearch['name'] = $sName;
             }
-            if(isset($sEmail)){
+            if (isset($sEmail)) {
                 $keySearch['mail_address'] = $sEmail;
             }
-            if(isset($sPhone)){
+            if (isset($sPhone)) {
                 $keySearch['phone'] = $sPhone;
             }
-            if(isset($sAddress)){
+            if (isset($sAddress)) {
                 $keySearch['address'] = $sAddress;
             }
-            $user = $this->userRepositories->searchUser($keySearch);
-        } else{
-            $user = $this->userRepositories->getAll();
-        }
-        if($user->total()<1){
-            flash('Khong tim thay du lieu!')->error();
+            $user = $this->user->searchUser($keySearch);
+        } else {
+            $user = $this->user->getAll();
         }
         return view('users.index', compact('user'));
     }
@@ -73,7 +69,7 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            $this->userRepositories->storeUser($request->all());
+            $this->user->storeUser($request->all());
             DB::commit();
         } catch (Throwable $exception) {
             DB::rollBack();
@@ -83,16 +79,18 @@ class UserController extends Controller
         flash('Them moi thanh cong!')->success();
         return redirect()->route('user.index');
     }
+
     public function edit($id)
     {
-        $data = $this->userRepositories->getOnlyUser($id);
+        $data = $this->user->getOnlyUser($id);
         return view('users.form', compact('data'));
     }
+
     public function update(CreateUserRequest $request, $id)
     {
         try {
-            $this->userRepositories->updateUser($id, $request->all());
-        }catch (Throwable $exception){
+            $this->user->updateUser($id, $request->all());
+        } catch (Throwable $exception) {
             flash('Cap nhat that bai!')->error();
             return redirect()->route('user.index');
         }

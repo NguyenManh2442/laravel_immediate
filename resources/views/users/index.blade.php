@@ -45,7 +45,9 @@
     <a type="button" class="btn btn-info" href="{{ route('user.create') }}">Them moi</a>
 </div>
 <div id="table">
-    @include('flash::message')
+    @if ($user->total() < 1)
+        <h2 style="color: red">Khong tim thay du lieu!</h2>
+    @endif
     <table>
         <tr>
             <th>STT</th>

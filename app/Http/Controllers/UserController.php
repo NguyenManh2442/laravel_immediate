@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -60,9 +61,23 @@ class UserController extends Controller
     }
 
     public function formLogin(){
-        return view('users.form-login');
+//        return view('users.form-login');
     }
-    public function login(Request $request){
-        dd($request);
+    public function login(Request $request)
+    {
+//        $data = [
+//            'mail_address' => $request->mail_address,
+//            'password' => $request->password
+//        ];
+//        if(Auth::attempt($data))
+//        {
+//            return redirect(route('user.index'));
+//        }
+//        return redirect(route('formLogin'));
+    }
+
+    public function logout(){
+//        Auth::logout();
+//        return redirect(route('formLogin'));
     }
 }

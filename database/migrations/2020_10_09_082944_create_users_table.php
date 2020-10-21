@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('name', 255);
             $table->string('address', 255);
             $table->string('phone', 15);
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });

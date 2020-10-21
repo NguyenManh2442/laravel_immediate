@@ -2,6 +2,8 @@
 @section('title','Danh sach')
 @section('head')
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="{{ asset('js/app.js') }}" defer></script>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         #table {
             margin-left: 350px;
@@ -24,25 +26,11 @@
             margin-left: 20px;
         }
     </style>
-@endsection
-@section('main')
-<h1 style="text-align: center">Danh sach Users</h1>
-<div id="f-search">
-    <form action="{{route('user.index')}}" method="get">
-        <label>Ten</label>
-        <input type="text" name="s_name" value="{{ request()->s_name }}" />
-        <label>Email</label>
-        <input type="text" name="s_email" value="{{ request()->s_email }}" />
-        <label>Phone</label>
-        <input type="text" name="s_phone" value="{{ request()->s_phone }}" />
-        <label>Dia chi</label>
-        <input type="text" name="s_address" value="{{ request()->s_address }}" />
-        @csrf
-        <input type="submit" name="btn_search" value="Tim kiem" />
-    </form>
-</div>
-<div style="text-align: center; margin-bottom: 50px">
-    <a type="button" class="btn btn-info" href="{{ route('user.create') }}">Them moi</a>
+</head>
+<body>
+<h1 style="text-align: center">user</h1>
+<div style="text-align: center">
+    <a type="button" class="btn btn-info" href="{{route('user.create')}}">Them moi</a>
 </div>
 <div id="table">
     @if ($user->total() < 1)

@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 
 class User extends Model
 {
-    use SoftDeletes;
+    Use SoftDeletes;
+    use Notifiable;
 
     protected $table = 'users';
     protected $perPage = 20;

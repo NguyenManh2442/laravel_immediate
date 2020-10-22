@@ -24,12 +24,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('btn-search')) {
-            $sName = $request->input('s-name');
-            $sEmail = $request->input('s-email');
-            $sPhone = $request->input('s-phone');
-            $sAddress = $request->input('s-address');
-            $keySearch = [];
+        $keySearch = [];
+        if ($request->input('btn_search')) {
+            $sName = $request->input('s_name');
+            $sEmail = $request->input('s_email');
+            $sPhone = $request->input('s_phone');
+            $sAddress = $request->input('s_address');
             if (isset($sName)) {
                 $keySearch['name'] = $sName;
             }
@@ -42,10 +42,8 @@ class UserController extends Controller
             if (isset($sAddress)) {
                 $keySearch['address'] = $sAddress;
             }
-            $user = $this->user->searchUser($keySearch);
-        } else {
-            $user = $this->user->getAll();
         }
+        $user = $this->user->getUser($keySearch);
         return view('users.index', compact('user'));
     }
 

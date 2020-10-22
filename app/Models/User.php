@@ -11,6 +11,7 @@ class User extends Model
     use SoftDeletes;
 
     protected $table = 'users';
+    protected $perPage = 20;
 
     protected $fillable = [
         'mail_address',
@@ -25,10 +26,18 @@ class User extends Model
         'updated_at',
     ];
 
-    public function getAll()
+    public function getUser(array $request)
     {
-        return DB::table('users')
-            ->paginate(20);
+        $query = DB::table('users');
+        if (!empty($request)) {
+            foreach ($request as $key => $value) {
+                if (isset($request['phone'])) {
+                    $query->where($key, '=', $value);
+                }
+                $query->where($key, 'like', '%' . $value . '%');
+            }
+        }
+        return $query->paginate($this->perPage);
     }
 
     public function storeUser(array $request)
@@ -62,18 +71,5 @@ class User extends Model
         }
         $user->save();
         return true;
-    }
-
-    public function searchUser(array $request)
-    {
-
-        $query = DB::table('users');
-        foreach ($request as $key => $value) {
-            if (isset($request['phone'])) {
-                $query->where($key, '=', $value);
-            }
-            $query->where($key, 'like', '%' . $value . '%');
-        }
-        return $query->paginate(20);
     }
 }

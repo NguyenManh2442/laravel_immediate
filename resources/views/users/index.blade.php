@@ -30,15 +30,15 @@
 <div id="f-search">
     <form action="{{route('user.index')}}" method="get">
         <label>Ten</label>
-        <input type="text" name="s-name">
+        <input type="text" name="s_name">
         <label>Email</label>
-        <input type="text" name="s-email">
+        <input type="text" name="s_email">
         <label>Phone</label>
-        <input type="text" name="s-phone">
+        <input type="text" name="s_phone">
         <label>Dia chi</label>
-        <input type="text" name="s-address">
+        <input type="text" name="s_address">
         @csrf
-        <input type="submit" name="btn-search" value="Tim kiem">
+        <input type="submit" name="btn_search" value="Tim kiem">
     </form>
 </div>
 <div style="text-align: center; margin-bottom: 50px">

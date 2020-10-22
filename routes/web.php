@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store']])->name('*','user')->middleware('CheckLogin');
+Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store']])->name('*','user');
 
 //Route::get('/login','UserController@formLogin')->name('formLogin')->middleware("CheckUser");
 //Route::post('/login', 'UserController@login')->name('login')->middleware("throttle:5,2");

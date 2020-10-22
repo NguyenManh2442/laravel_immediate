@@ -15,6 +15,14 @@ class User extends Model
     protected $table = 'users';
     protected $perPage = 20;
 
+    const ADMIN = 1;
+    const EMPLOYEE = 2;
+
+    const ROLE = [
+        self::ADMIN => 'Quản trị viên',
+        self::EMPLOYEE => 'Nhân viên'
+    ];
+
     protected $fillable = [
         'mail_address',
         'name',

@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\SendEmailResetPass;
 use App\Interfaces\UserRepositoryInterface;
+use App\Jobs\SendEmail;
+use App\Mail\WelcomeUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class UserController extends Controller
@@ -21,7 +26,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index()
     {
@@ -32,7 +37,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function create()
     {
@@ -56,28 +61,13 @@ class UserController extends Controller
             flash('Them moi that bai!')->error();
             return redirect()->route('user.create');
         }
+        $details = [
+            'mail' => $request->mail_address,
+            'name' => $request->name
+        ];
+        SendEmail::dispatch($details);
         flash('Them moi thanh cong!')->success();
         return redirect()->route('user.index');
     }
 
-    public function formLogin(){
-//        return view('users.form-login');
-    }
-    public function login(Request $request)
-    {
-//        $data = [
-//            'mail_address' => $request->mail_address,
-//            'password' => $request->password
-//        ];
-//        if(Auth::attempt($data))
-//        {
-//            return redirect(route('user.index'));
-//        }
-//        return redirect(route('formLogin'));
-    }
-
-    public function logout(){
-//        Auth::logout();
-//        return redirect(route('formLogin'));
-    }
 }

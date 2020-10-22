@@ -42,6 +42,11 @@
         @error('password_confirmation')
             <lable style="color: red">{{ $errors->first('password_confirmation') }}</lable><br><br>
         @enderror
+        <label>Input</label>
+        <select>
+            <option>Quản trị viên</option>
+            <option>Nhân viên</option>
+        </select><br><br>
         @csrf
         <input type="submit" value="{{ !isset($data) ? "Them moi" : "Cap nhat" }}"/>
     </form>

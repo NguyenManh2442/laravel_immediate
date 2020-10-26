@@ -3,39 +3,58 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
-use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class UserController extends Controller
 {
-    protected $userRepositories;
+    protected $user;
 
-    public function __construct(UserRepositoryInterface $userRepositories)
+    public function __construct(User $user)
     {
-        $this->userRepositories = $userRepositories;
+        $this->user = $user;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = $this->userRepositories->getAll();
+        $keySearch = [];
+        if ($request->input('btn_search')) {
+            $sName = $request->input('s_name');
+            $sEmail = $request->input('s_email');
+            $sPhone = $request->input('s_phone');
+            $sAddress = $request->input('s_address');
+            if (isset($sName)) {
+                $keySearch['name'] = $sName;
+            }
+            if (isset($sEmail)) {
+                $keySearch['mail_address'] = $sEmail;
+            }
+            if (isset($sPhone)) {
+                $keySearch['phone'] = $sPhone;
+            }
+            if (isset($sAddress)) {
+                $keySearch['address'] = $sAddress;
+            }
+        }
+        $user = $this->user->getUser($keySearch);
         return view('users.index', compact('user'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function create()
     {
-        return view('users.createNewUser');
+        return view('users.form');
     }
 
     /**
@@ -48,7 +67,7 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            $this->userRepositories->storeUser($request->all());
+            $this->user->storeUser($request->all());
             DB::commit();
         } catch (Throwable $exception) {
             DB::rollBack();
@@ -59,4 +78,21 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
+    public function edit($id)
+    {
+        $data = $this->user->getOnlyUser($id);
+        return view('users.form', compact('data'));
+    }
+
+    public function update(CreateUserRequest $request, $id)
+    {
+        try {
+            $this->user->updateUser($id, $request->all());
+        } catch (Throwable $exception) {
+            flash('Cap nhat that bai!')->error();
+            return redirect()->route('user.index');
+        }
+        flash('Cap nhat thanh cong!')->success();
+        return redirect()->route('user.index');
+    }
 }

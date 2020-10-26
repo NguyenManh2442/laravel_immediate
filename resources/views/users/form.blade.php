@@ -1,29 +1,34 @@
-<html>
-<head>
-
-</head>
-<body>
+@extends('layouts.default')
+@section('title','Them moi User')
+@section('head')
+@endsection
+@section('main')
 <div>
-    <h1 style="text-align: center">Them moi user</h1>
-    <form action="{{ route('user.store') }}" method="post">
-
+    @if (isset($data))
+        <h1 style="text-align: center">Update user</h1>
+        <form action="{{ route('user.update', $data[0]->id) }}" method="post">
+            @method('PUT')
+    @else
+        <h1 style="text-align: center">Them moi user</h1>
+        <form action="{{ route('user.store') }}" method="post">
+    @endif
         <lable style="color: {{ $errors->has('name') ? "red" : "black" }}">Ho ten user</lable>
-        <input type="text" name="name" style="border-color: {{ $errors->has('name') ? "red" : "black" }}"/><br><br>
+        <input type="text" name="name" style="border-color: {{ $errors->has('name') ? "red" : "black" }}" value="{{ old('name', $data[0]->name ?? null) }}" /><br><br>
         @error('name')
             <lable style="color: red">{{ $errors->first('name') }}</lable><br><br>
         @enderror
         <lable style="color: {{ $errors->has('mail_address') ? "red" : "black" }}">Email</lable>
-        <input type="text" name="mail_address" style="border-color: {{ $errors->has('mail_address') ? "red" : "black" }}"/><br><br>
+        <input type="text" name="mail_address" style="border-color: {{ $errors->has('mail_address') ? "red" : "black" }}" value="{{ old('mail_address', $data[0]->mail_address ?? null) }}" /><br><br>
         @error('mail_address')
             <lable style="color: red">{{ $errors->first('mail_address') }}</lable><br><br>
         @enderror
         <lable style="color: {{ $errors->has('address') ? "red" : "black" }}">Address</lable>
-        <input type="text" name="address" style="border-color: {{ $errors->has('address') ? "red" : "black" }}"/><br><br>
+        <input type="text" name="address" style="border-color: {{ $errors->has('address') ? "red" : "black" }}" value="{{ old('address', $data[0]->address ?? null) }}" /><br><br>
         @error('address')
             <lable style="color: red">{{ $errors->first('address') }}</lable><br><br>
         @enderror
         <lable style="color: {{ $errors->has('phone') ? "red" : "black" }}">Phone</lable>
-        <input type="text" name="phone" style="border-color: {{ $errors->has('phone') ? "red" : "black" }}"/><br><br>
+        <input type="text" name="phone" style="border-color: {{ $errors->has('phone') ? "red" : "black" }}" value="{{ old('phone', $data[0]->phone ?? null) }}" /><br><br>
         @error('phone')
             <lable style="color: red">{{ $errors->first('phone') }}</lable><br><br>
         @enderror
@@ -38,8 +43,7 @@
             <lable style="color: red">{{ $errors->first('password_confirmation') }}</lable><br><br>
         @enderror
         @csrf
-        <input type="submit" value="Them moi"/>
+        <input type="submit" value="{{ !isset($data) ? "Them moi" : "Cap nhat" }}"/>
     </form>
 </div>
-</body>
-</html>
+@endsection

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Model
 {
@@ -47,7 +48,7 @@ class User extends Model
         $user->mail_address = $request['mail_address'];
         $user->address = $request['address'];
         $user->phone = $request['phone'];
-        $user->password = bcrypt($request['password']);
+        $user->password = Hash::make($request['password']);
         $user->save();
         return true;
     }
@@ -67,7 +68,7 @@ class User extends Model
         $user->address = $request['address'];
         $user->phone = $request['phone'];
         if (empty($request['password'])) {
-            $user->password = bcrypt($request['password']);
+            $user->password = Hash::make($request['password']);
         }
         $user->save();
         return true;

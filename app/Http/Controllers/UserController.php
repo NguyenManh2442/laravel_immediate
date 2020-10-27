@@ -12,6 +12,7 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->middleware('CheckRole')->only('create', 'store', 'edit', 'update');
     }
     /**
      * Display a listing of the resource.
@@ -49,6 +50,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('isAdmin');
         return view('users.form');
     }
     /**
@@ -59,6 +61,7 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
+        $this->authorize('isAdmin');
         try {
             DB::beginTransaction();
             $this->user->storeUser($request->all());
@@ -78,11 +81,13 @@ class UserController extends Controller
     }
     public function edit($id)
     {
+        $this->authorize('isAdmin');
         $data = $this->user->getOnlyUser($id);
         return view('users.form', compact('data'));
     }
     public function update(CreateUserRequest $request, $id)
     {
+        $this->authorize('isAdmin');
         try {
             $this->user->updateUser($id, $request->all());
         } catch (Throwable $exception) {

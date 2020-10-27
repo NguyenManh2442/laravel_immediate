@@ -17,7 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store','edit','update']])->name('*','user')->middleware("CheckLogin");
+Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store','edit','update']])->name('*','user')->middleware('CheckLogin');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 

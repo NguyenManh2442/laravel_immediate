@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     Use SoftDeletes;
     use Notifiable;
@@ -59,6 +60,7 @@ class User extends Model
         $user->address = $request['address'];
         $user->phone = $request['phone'];
         $user->password = Hash::make($request['password']);
+        $user->role = $request['role'];
         $user->save();
         return true;
     }
@@ -80,6 +82,7 @@ class User extends Model
         if (empty($request['password'])) {
             $user->password = Hash::make($request['password']);
         }
+        $user->role = $request['role'];
         $user->save();
         return true;
     }

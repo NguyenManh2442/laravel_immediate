@@ -1,7 +1,9 @@
 <?php
 namespace App\Http\Controllers;
+use App\Events\CreatedUser;
 use App\Http\Requests\CreateUserRequest;
 use App\Jobs\SendEmail;
+use App\Models\Classroom;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -9,9 +11,13 @@ use Throwable;
 class UserController extends Controller
 {
     protected $user;
-    public function __construct(User $user)
+    protected $classroom;
+    public function __construct(User $user, Classroom $classroom)
     {
         $this->user = $user;
+        $this->classroom = $classroom;
+        $this->middleware('CheckRole')->only('create', 'store', 'edit', 'update');
+        $this->middleware('CheckClassroom')->only('index', 'create', 'store');
         $this->middleware('check_role')->only('create', 'store', 'edit', 'update');
     }
     /**
@@ -27,8 +33,9 @@ class UserController extends Controller
             $sEmail = $request->input('s_email');
             $sPhone = $request->input('s_phone');
             $sAddress = $request->input('s_address');
+            $sClassroom = $request->input('s_classroom');
             if (isset($sName)) {
-                $keySearch['name'] = $sName;
+                $keySearch['users.name'] = $sName;
             }
             if (isset($sEmail)) {
                 $keySearch['mail_address'] = $sEmail;
@@ -39,9 +46,13 @@ class UserController extends Controller
             if (isset($sAddress)) {
                 $keySearch['address'] = $sAddress;
             }
+            if (isset($sClassroom)) {
+                $keySearch['classroom_id'] = $sClassroom;
+            }
         }
         $user = $this->user->getUser($keySearch);
-        return view('users.index', compact('user'));
+        $classroom = $this->classroom->getAllClassroom();
+        return view('users.index', compact('user', 'classroom'));
     }
     /**
      * Show the form for creating a new resource.
@@ -51,7 +62,8 @@ class UserController extends Controller
     public function create()
     {
         $this->authorize('isAdmin');
-        return view('users.form');
+        $class = $this->classroom->getAllClassroom();
+        return view('users.form', compact('class'));
     }
     /**
      * Store a newly created resource in storage.
@@ -75,7 +87,7 @@ class UserController extends Controller
             'mail' => $request->mail_address,
             'name' => $request->name
         ];
-        SendEmail::dispatch($details);
+        event(new CreatedUser($details));
         flash('Them moi thanh cong!')->success();
         return redirect()->route('user.index');
     }
@@ -83,7 +95,8 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin');
         $data = $this->user->getOnlyUser($id);
-        return view('users.form', compact('data'));
+        $class = $this->classroom->getAllClassroom();
+        return view('users.form', compact('data','class'));
     }
     public function update(CreateUserRequest $request, $id)
     {

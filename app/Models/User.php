@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    Use SoftDeletes;
+    use SoftDeletes;
     use Notifiable;
 
     protected $table = 'users';
@@ -40,16 +40,28 @@ class User extends Authenticatable
 
     public function getUser(array $request)
     {
-        $query = DB::table('users');
+        $query = User::query();
+        $query->join('classrooms', 'classroom_id', '=', 'classrooms.id');
         if (!empty($request)) {
             foreach ($request as $key => $value) {
-                if (isset($request['phone'])) {
-                    $query->where($key, '=', $value);
+                if (isset($request['phone']) || isset($request['classroom_id'])) {
+                    $query->whereWithEqual($key, $value);
                 }
-                $query->where($key, 'like', '%' . $value . '%');
+                $query->whereWithLike($key, $value);
             }
         }
-        return $query->paginate($this->perPage);
+        return $query->select('users.id as id', 'mail_address', 'users.name as name', 'address', 'classrooms.name as class_name', 'phone', 'role')
+            ->paginate($this->perPage);
+    }
+
+    public function scopeWhereWithEqual($query, $key, $value)
+    {
+        return $query->where($key, '=', $value);
+    }
+
+    public function scopeWhereWithLike($query, $key, $value)
+    {
+        return $query->where($key, 'like', '%' . $value . '%');
     }
 
     public function storeUser(array $request)
@@ -61,6 +73,7 @@ class User extends Authenticatable
         $user->phone = $request['phone'];
         $user->password = Hash::make($request['password']);
         $user->role = $request['role'];
+        $user->classroom_id = $request['classroom'];
         $user->save();
         return true;
     }
@@ -83,6 +96,7 @@ class User extends Authenticatable
             $user->password = Hash::make($request['password']);
         }
         $user->role = $request['role'];
+        $user->classroom_id = $request['classroom'];
         $user->save();
         return true;
     }

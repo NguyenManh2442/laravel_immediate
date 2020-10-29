@@ -47,6 +47,12 @@
             <option value="{{ \user::ADMIN }}" {{ old('role') == \user::ADMIN || isset($data) && $data[0]->role == \user::ADMIN ? 'selected' : null }} >{{ \user::ROLE[\user::ADMIN] }}</option>
             <option value="{{ \user::EMPLOYEE }}" {{ old('role') == \user::EMPLOYEE || isset($data) && $data[0]->role == \user::EMPLOYEE ? 'selected' : null }} >{{ \user::ROLE[\user::EMPLOYEE] }}</option>
         </select><br><br>
+        <label>Lớp</label>
+        <select name="classroom">
+            @foreach($class as $value)
+                <option value="{{ $value->id }}" {{ old('classroom') == $value->id || isset($data) && $data[0]->classroom_id == $value->id ? 'selected' : null }}>{{ $value->name }}</option>
+            @endforeach
+        </select><br><br>
         @csrf
         <input type="submit" value="{{ !isset($data) ? "Them moi" : "Cap nhat" }}"/>
     </form>

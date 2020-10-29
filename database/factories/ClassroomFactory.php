@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\User;
+use App\Models\Classroom;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 use Buihuycuong\Vnfaker\VNFaker;
@@ -18,15 +18,8 @@ use Buihuycuong\Vnfaker\VNFaker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
-    $domain = ['gmail.com', 'outlook.com', 'example.com'];
+$factory->define(Classroom::class, function (Faker $faker) {
     return [
-        'mail_address' => vnfaker()->email($domain),
-        'name' => vnfaker()->fullname($word = 3),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'address' => $faker->address(),
-        'phone' => vnfaker()->mobilephone($numbers = 10),
-        'role' => rand(User::ADMIN, User::EMPLOYEE),
-        'classroom_id' => rand(1,10),
+        'name' => vnfaker()->fullname($word = 1),
     ];
 });

@@ -42,6 +42,11 @@
         @error('password_confirmation')
             <lable style="color: red">{{ $errors->first('password_confirmation') }}</lable><br><br>
         @enderror
+        <label>Input</label>
+        <select name="role">
+            <option value="{{ \user::ADMIN }}" {{ old('role') == \user::ADMIN || isset($data) && $data[0]->role == \user::ADMIN ? 'selected' : null }} >{{ \user::ROLE[\user::ADMIN] }}</option>
+            <option value="{{ \user::EMPLOYEE }}" {{ old('role') == \user::EMPLOYEE || isset($data) && $data[0]->role == \user::EMPLOYEE ? 'selected' : null }} >{{ \user::ROLE[\user::EMPLOYEE] }}</option>
+        </select><br><br>
         @csrf
         <input type="submit" value="{{ !isset($data) ? "Them moi" : "Cap nhat" }}"/>
     </form>

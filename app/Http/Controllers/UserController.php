@@ -1,22 +1,19 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests\CreateUserRequest;
+use App\Jobs\SendEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
-
 class UserController extends Controller
 {
     protected $user;
-
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->middleware('check_role')->only('create', 'store', 'edit', 'update');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +43,6 @@ class UserController extends Controller
         $user = $this->user->getUser($keySearch);
         return view('users.index', compact('user'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -54,9 +50,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('isAdmin');
         return view('users.form');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -65,6 +61,7 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
+        $this->authorize('isAdmin');
         try {
             DB::beginTransaction();
             $this->user->storeUser($request->all());
@@ -74,18 +71,23 @@ class UserController extends Controller
             flash('Them moi that bai!')->error();
             return redirect()->route('user.create');
         }
+        $details = [
+            'mail' => $request->mail_address,
+            'name' => $request->name
+        ];
+        SendEmail::dispatch($details);
         flash('Them moi thanh cong!')->success();
         return redirect()->route('user.index');
     }
-
     public function edit($id)
     {
+        $this->authorize('isAdmin');
         $data = $this->user->getOnlyUser($id);
         return view('users.form', compact('data'));
     }
-
     public function update(CreateUserRequest $request, $id)
     {
+        $this->authorize('isAdmin');
         try {
             $this->user->updateUser($id, $request->all());
         } catch (Throwable $exception) {

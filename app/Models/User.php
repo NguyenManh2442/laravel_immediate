@@ -4,15 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use SoftDeletes;
+    Use SoftDeletes;
+    use Notifiable;
 
     protected $table = 'users';
     protected $perPage = 20;
+
+    const ADMIN = 1;
+    const EMPLOYEE = 2;
+
+    const ROLE = [
+        self::ADMIN => 'Quản trị viên',
+        self::EMPLOYEE => 'Nhân viên'
+    ];
 
     protected $fillable = [
         'mail_address',
@@ -49,6 +60,7 @@ class User extends Model
         $user->address = $request['address'];
         $user->phone = $request['phone'];
         $user->password = Hash::make($request['password']);
+        $user->role = $request['role'];
         $user->save();
         return true;
     }
@@ -70,6 +82,7 @@ class User extends Model
         if (empty($request['password'])) {
             $user->password = Hash::make($request['password']);
         }
+        $user->role = $request['role'];
         $user->save();
         return true;
     }

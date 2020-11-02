@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,5 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store','edit', 'update']])->name('*','user');
+Route::resource('/user', 'UserController', ['only' => ['index', 'create', 'store','edit','update']])->name('*','user')->middleware('check_login');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 

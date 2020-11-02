@@ -6,7 +6,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         #table {
-            margin-left: 350px;
+            margin-left: 300px;
         }
 
         th {
@@ -21,7 +21,7 @@
             /*margin-left: 330px;*/
             /*margin-top: 50px;*/
             /*margin-top: 50px;*/
-            margin: 50px 0px 50px 330px;
+            margin: 50px 0px 50px 250px;
         }
 
         label {
@@ -52,6 +52,13 @@
             <input type="text" name="s_phone" value="{{ request()->s_phone }}"/>
             <label>Dia chi</label>
             <input type="text" name="s_address" value="{{ request()->s_address }}"/>
+            <label>Lop hoc</label>
+            <select name="s_classroom">
+                <option value=""></option>
+                @foreach($classroom as $value)
+                    <option value="{{ $value->id }}" {{ request()->s_classroom == $value->id ? 'selected' : null }}>{{ $value->name }}</option>
+                @endforeach
+            </select>
             @csrf
             <input type="submit" name="btn_search" value="Tim kiem"/>
         </form>
@@ -68,6 +75,7 @@
                 <th>Address</th>
                 <th>Phone number</th>
                 <th>Vai trò</th>
+                <th>Lớp</th>
                 @if (Auth::user()->role == \user::ADMIN)
                     <th>Hành động</th>
                 @endif
@@ -80,6 +88,7 @@
                     <td>{{ $value->address }}</td>
                     <td>{{ $value->phone }}</td>
                     <td>{{ $value->role == \user::ADMIN ? \user::ROLE[\user::ADMIN] : \user::ROLE[\user::EMPLOYEE] }}</td>
+                    <td>{{ $value-> class_name}}</td>
                     @if (Auth::user()->role == \user::ADMIN)
                         <td><a type="button" class="btn btn-info" href="{{ route('user.edit', $value->id) }}">Edit</a>
                         </td>

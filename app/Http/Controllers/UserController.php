@@ -12,7 +12,7 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->middleware('CheckRole')->only('create', 'store', 'edit', 'update');
+        $this->middleware('check_role')->only('create', 'store', 'edit', 'update');
     }
     /**
      * Display a listing of the resource.

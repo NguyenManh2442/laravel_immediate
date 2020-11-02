@@ -26,6 +26,6 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'address' => $faker->address(),
         'phone' => vnfaker()->mobilephone($numbers = 10),
-        'role' => rand(1,2),
+        'role' => rand(User::ADMIN, User::EMPLOYEE),
     ];
 });

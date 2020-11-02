@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 use App\Events\CreatedUser;
 use App\Http\Requests\CreateUserRequest;
-use App\Jobs\SendEmail;
 use App\Models\Classroom;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,8 +15,7 @@ class UserController extends Controller
     {
         $this->user = $user;
         $this->classroom = $classroom;
-        $this->middleware('CheckRole')->only('create', 'store', 'edit', 'update');
-        $this->middleware('CheckClassroom')->only('index', 'create', 'store');
+        $this->middleware('check_classroom')->only('index', 'create', 'store');
         $this->middleware('check_role')->only('create', 'store', 'edit', 'update');
     }
     /**
